@@ -7,12 +7,14 @@ export const Route = createFileRoute('/settings')({
 
 function SettingsPage() {
   return (
-    <main>
-      <h1 className="mb-6 font-serif text-5xl font-medium tracking-tight">Settings</h1>
-      <EmptyState
-        title="No settings yet"
-        description="Account settings arrive with the auth plugin. Nothing here can be saved."
-      />
+    <main id="content">
+      <h1 className="text-3xl font-semibold tracking-tight">Settings</h1>
+      <div className="mt-6">
+        <EmptyState
+          title="No settings yet"
+          description="Account settings arrive with the auth plugin. Nothing here can be saved."
+        />
+      </div>
     </main>
   );
 }

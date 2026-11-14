@@ -7,17 +7,53 @@ const description =
 const canonical = new URL('/', appConfig.app.url).href
 ---
 
-<Base title={`${appConfig.app.name}`} description={description} canonical={canonical}>
-  <main>
-    <p class="kicker">One Worker</p>
-    <h1>A SaaS shell on Cloudflare.</h1>
-    <p class="lede">
-      Public pages are built as HTML. The product shell lives at <a href="/app">/app</a>. The API is
-      read-only until an auth plugin is registered.
-    </p>
-    <div class="actions">
-      <a class="button button-primary" href="/pricing">View pricing</a>
-      <a class="button button-ghost" href="/app">Open the app shell</a>
-    </div>
+<Base title={appConfig.app.name} description={description} canonical={canonical} wide>
+  <main id="content">
+    <section class="hero">
+      <div>
+        <h1>A SaaS shell on one Worker.</h1>
+        <p class="lede">
+          Public pages are built as HTML. The product lives at <a href="/app">/app</a>. The API stays
+          read-only until an auth plugin is registered.
+        </p>
+        <div class="actions">
+          <a class="button button-primary" href="/pricing">View pricing</a>
+          <a class="button button-ghost" href="/app">Open the app</a>
+        </div>
+      </div>
+      <div class="stage" aria-hidden="true">
+        <div class="stage-bar">
+          <span class="live"></span>
+          <span class="stage-path">/app</span>
+        </div>
+        <div class="mini">
+          <div class="mini-side">
+            <span class="mini-on">Home</span>
+            <span>Settings</span>
+          </div>
+          <div class="mini-main">
+            <p class="mini-title">No session yet.</p>
+            <p class="mini-row"><span>Schema</span><b>1</b></p>
+            <p class="mini-row"><span>Plugins</span><b>None</b></p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="facts" aria-label="What this Worker serves">
+      <div>
+        <h2>Public pages</h2>
+        <p>Home and pricing are static HTML. They do not read the database.</p>
+      </div>
+      <div>
+        <h2>Application</h2>
+        <p>
+          The product starts at <a href="/app">/app</a>. Refreshing a deep link stays in the shell.
+        </p>
+      </div>
+      <div>
+        <h2>API</h2>
+        <p>Reads return the app name and enabled plugins. Writes are refused until auth is on.</p>
+      </div>
+    </section>
   </main>
 </Base>

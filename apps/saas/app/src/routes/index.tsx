@@ -34,28 +34,31 @@ function AppHome() {
     return () => controller.abort();
   }, []);
 
+  const pending = !failed && schemaVersion === null;
+
   return (
-    <main>
-      <p className="mb-3 text-sm font-medium tracking-wide text-accent uppercase">Workspace</p>
-      <h1 className="font-serif text-5xl font-medium tracking-tight">No session yet.</h1>
-      <p className="mt-4 max-w-xl text-muted">
-        Writes return auth_required until the auth plugin is enabled. This page only reads
-        /api/meta.
+    <main id="content">
+      <h1 className="text-3xl font-semibold tracking-tight">No session yet.</h1>
+      <p className="mt-3 max-w-lg text-base leading-7 text-muted">
+        Writes return auth_required until the auth plugin is enabled. This page only reads /api/meta.
       </p>
-      <dl className="mt-8 grid gap-4 rounded-lg border border-border bg-card p-5 text-sm">
-        <div>
-          <dt className="text-muted">Schema version</dt>
-          <dd className="font-medium" data-testid="schema-version">
-            {failed ? 'Unavailable' : (schemaVersion ?? 'Loading')}
+      <dl
+        className="mt-8 divide-y divide-border overflow-hidden rounded-xl border border-border bg-card"
+        aria-busy={pending}
+      >
+        <div className="flex items-baseline justify-between gap-6 px-5 py-4">
+          <dt className="text-sm text-muted">Schema version</dt>
+          <dd className="text-sm font-medium tabular-nums" data-testid="schema-version">
+            {failed ? 'Could not read' : (schemaVersion ?? 'Reading')}
           </dd>
         </div>
-        <div>
-          <dt className="text-muted">Plugins</dt>
-          <dd className="font-medium">
+        <div className="flex items-baseline justify-between gap-6 px-5 py-4">
+          <dt className="text-sm text-muted">Plugins</dt>
+          <dd className="text-right text-sm font-medium">
             {failed
-              ? 'Unavailable'
+              ? 'Could not read'
               : plugins === null
-                ? 'Loading'
+                ? 'Reading'
                 : plugins.length === 0
                   ? 'None enabled'
                   : plugins.join(', ')}

@@ -6,8 +6,8 @@ const description = 'Display prices for the Ship SaaS template. Checkout is not 
 const canonical = new URL('/pricing', appConfig.app.url).href
 ---
 
-<Base title={`Pricing · ${appConfig.app.name}`} description={description} canonical={canonical}>
-  <main>
+<Base title={`Pricing · ${appConfig.app.name}`} description={description} canonical={canonical} wide>
+  <main id="content">
     <h1>Pricing</h1>
     <p class="lede">These figures are configuration, not a catalog with checkout.</p>
     <ul class="plans">
@@ -17,6 +17,11 @@ const canonical = new URL('/pricing', appConfig.app.url).href
             <h2>{plan.name}</h2>
             <p class="price">{plan.price}</p>
             <p class="note">{plan.description}</p>
+            {plan.id === 'starter' && (
+              <a class="button button-ghost" href="/app">
+                Open the app
+              </a>
+            )}
           </li>
         ))
       }

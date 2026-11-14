@@ -5,6 +5,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./styles/tokens.css": "./styles/tokens.css",
+    "./styles/marketing.css": "./styles/marketing.css",
     "./styles/app.css": "./styles/app.css"
   },
   "peerDependencies": {

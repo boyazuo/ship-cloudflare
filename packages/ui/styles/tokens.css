@@ -1,12 +1,14 @@
 :root {
-  --background: #f4f1ea;
-  --foreground: #1f2933;
-  --card: #fffdf8;
-  --muted: #5c6570;
-  --border: #e4ddd0;
-  --accent: #0b6e4f;
-  --accent-foreground: #f3faf6;
-  --sans: 'Avenir Next', 'Segoe UI', sans-serif;
-  --serif: 'Iowan Old Style', Palatino, 'Palatino Linotype', serif;
-  --radius: 0.75rem;
+  --background: #f6f7f9;
+  --foreground: #121418;
+  --card: #ffffff;
+  --muted: #5e6672;
+  --border: #e4e7ee;
+  --inset: #eef0f4;
+  --accent: #121418;
+  --accent-foreground: #ffffff;
+  --accent-hover: #2c313c;
+  --signal: #e24a0b;
+  --sans: ui-sans-serif, system-ui, 'Segoe UI', sans-serif;
+  --radius: 0.5rem;
 }

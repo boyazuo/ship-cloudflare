@@ -1,13 +1,20 @@
 ---
 import '../styles/site.css'
+import { appConfig } from '../../../app.config'
 
 interface Props {
   title: string
   description: string
   canonical: string
+  wide?: boolean
 }
 
-const { title, description, canonical } = Astro.props
+const { title, description, canonical, wide = false } = Astro.props
+const path = Astro.url.pathname.replace(/\/$/, '') || '/'
+const links = [
+  { href: '/pricing', label: 'Pricing' },
+  { href: '/app', label: 'App' },
+]
 ---
 
 <!doctype html>
@@ -21,12 +28,24 @@ const { title, description, canonical } = Astro.props
     <link rel="icon" href="/favicon.svg" />
   </head>
   <body>
-    <div class="shell">
+    <a class="skip" href="#content">Skip to content</a>
+    <div class:list={['shell', { wide }]}>
       <header class="nav">
-        <a class="brand" href="/">Ship SaaS</a>
+        <a class="brand" href="/">
+          <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+            <rect width="32" height="32" rx="8" fill="currentColor"></rect>
+            <path d="M16 7.5 24.5 23h-4.1L16 15.2 11.6 23H7.5Z" fill="var(--background)"></path>
+          </svg>
+          {appConfig.app.name}
+        </a>
         <nav class="nav-links" aria-label="Primary">
-          <a href="/pricing">Pricing</a>
-          <a href="/app">App</a>
+          {
+            links.map((link) => (
+              <a href={link.href} aria-current={path === link.href ? 'page' : undefined}>
+                {link.label}
+              </a>
+            ))
+          }
         </nav>
       </header>
       <slot />

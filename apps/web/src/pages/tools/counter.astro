@@ -7,14 +7,13 @@ const canonical = new URL('/tools/counter', site.url).href
 ---
 
 <Base title={`Counter · ${site.name}`} description={description} canonical={canonical}>
-  <main>
-    <p class="kicker">Tool</p>
+  <main id="content" class="tool">
     <h1>Counter</h1>
     <p class="lede">
       The buttons change the number on this page. Refreshing resets it, and nothing is sent to a
       server.
     </p>
-    <p class="count" id="count" aria-live="polite">0</p>
+    <output class="count" id="count" aria-live="polite">0</output>
     <div class="actions">
       <button class="button button-primary" type="button" id="increment">Increment</button>
       <button class="button button-ghost" type="button" id="reset">Reset</button>

@@ -7,10 +7,12 @@
   --color-card: var(--card);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-inset: var(--inset);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-hover: var(--accent-hover);
+  --color-signal: var(--signal);
   --font-sans: var(--sans);
-  --font-serif: var(--serif);
   --radius-lg: var(--radius);
 }
 
