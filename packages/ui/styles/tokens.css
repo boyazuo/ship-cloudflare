@@ -1,0 +1,12 @@
+:root {
+  --background: #f4f1ea;
+  --foreground: #1f2933;
+  --card: #fffdf8;
+  --muted: #5c6570;
+  --border: #e4ddd0;
+  --accent: #0b6e4f;
+  --accent-foreground: #f3faf6;
+  --sans: 'Avenir Next', 'Segoe UI', sans-serif;
+  --serif: 'Iowan Old Style', Palatino, 'Palatino Linotype', serif;
+  --radius: 0.75rem;
+}

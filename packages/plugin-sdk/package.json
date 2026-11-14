@@ -1,0 +1,20 @@
+{
+  "name": "@ship/plugin-sdk",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "hono": "4.13.18"
+  },
+  "devDependencies": {
+    "@ship/tsconfig": "workspace:*",
+    "typescript": "5.9.3",
+    "vitest": "4.1.12"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  }
+}

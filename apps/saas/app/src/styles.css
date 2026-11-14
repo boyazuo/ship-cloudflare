@@ -1,0 +1,3 @@
+@import '@ship/ui/styles/app.css';
+@source '.';
+@source '../../node_modules/@ship/ui/src';

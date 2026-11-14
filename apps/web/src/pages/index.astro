@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro'
+import { site } from '../site'
+
+const canonical = new URL('/', site.url).href
+---
+
+<Base title={site.name} description={site.description} canonical={canonical}>
+  <main>
+    <p class="kicker">Content site</p>
+    <h1>Pages, published as HTML.</h1>
+    <p class="lede">
+      This template is a static site. Each public URL is a document. A small tool can sit on its own
+      page. Accounts, payments, and anything that must be stored belong in the SaaS template.
+    </p>
+    <div class="actions">
+      <a class="button button-primary" href="/guide">Read the guide</a>
+      <a class="button button-ghost" href="/tools/counter">Open the counter</a>
+    </div>
+  </main>
+</Base>

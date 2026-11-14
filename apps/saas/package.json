@@ -1,0 +1,48 @@
+{
+  "name": "@ship/saas",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/build.mjs && concurrently -k -n site,app,worker -c blue,green,magenta \"pnpm dev:site\" \"pnpm dev:app\" \"pnpm dev:worker\"",
+    "dev:site": "astro dev --root site --port 4321 --host 127.0.0.1",
+    "dev:app": "vite --config app/vite.config.ts --host 127.0.0.1 --port 5174",
+    "dev:worker": "wrangler d1 migrations apply DB --local && wrangler dev --port 8787 --host 127.0.0.1",
+    "build": "node scripts/build.mjs",
+    "preview": "pnpm build && wrangler d1 migrations apply DB --local && wrangler dev --port 8787 --host 127.0.0.1",
+    "typecheck": "pnpm exec tsr generate && tsc --noEmit -p tsconfig.json && tsc --noEmit -p app/tsconfig.json && tsc --noEmit -p test/tsconfig.json && astro check --root site",
+    "test": "mkdir -p dist && vitest run",
+    "cf:types": "wrangler types",
+    "cf:check": "wrangler deploy --dry-run --env=\"\"",
+    "db:generate": "drizzle-kit generate"
+  },
+  "dependencies": {
+    "@ship/plugin-sdk": "workspace:*",
+    "@ship/ui": "workspace:*",
+    "@ship/worker-kit": "workspace:*",
+    "@tanstack/react-router": "1.170.46",
+    "astro": "7.4.12",
+    "drizzle-orm": "0.45.4",
+    "hono": "4.13.18",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@cloudflare/vitest-plugin": "1.8.2",
+    "@ship/tsconfig": "workspace:*",
+    "@tailwindcss/vite": "4.3.5",
+    "@tanstack/router-cli": "1.168.0",
+    "@tanstack/router-plugin": "1.169.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "concurrently": "10.0.7",
+    "drizzle-kit": "0.31.11",
+    "tailwindcss": "4.3.5",
+    "typescript": "5.9.3",
+    "vite": "8.3.8",
+    "vitest": "4.1.12",
+    "wrangler": "4.162.0"
+  }
+}

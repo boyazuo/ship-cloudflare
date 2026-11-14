@@ -1,0 +1,21 @@
+{
+  "name": "@ship/web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1 --port 4322",
+    "build": "astro build",
+    "typecheck": "astro check",
+    "preview": "pnpm build && wrangler dev --port 4173 --host 127.0.0.1",
+    "cf:check": "wrangler deploy --dry-run --env=\"\""
+  },
+  "dependencies": {
+    "@ship/ui": "workspace:*",
+    "astro": "7.4.12"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "typescript": "5.9.3",
+    "wrangler": "4.162.0"
+  }
+}

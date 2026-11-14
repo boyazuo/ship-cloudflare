@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro'
+import { appConfig } from '../../../app.config'
+
+const description = 'That page is not part of this site.'
+const canonical = new URL('/404', appConfig.app.url).href
+---
+
+<Base title={`Not found · ${appConfig.app.name}`} description={description} canonical={canonical}>
+  <main>
+    <h1>Not found</h1>
+    <p class="lede">This URL is not a published page. The response status is 404.</p>
+    <div class="actions">
+      <a class="button button-primary" href="/">Back home</a>
+    </div>
+  </main>
+</Base>

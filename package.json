@@ -1,0 +1,40 @@
+{
+  "name": "ship-cloudflare",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Open-source Cloudflare deployment templates for frontend apps and SaaS shells.",
+  "scripts": {
+    "dev:web": "pnpm --filter @ship/web dev",
+    "dev:saas": "pnpm --filter @ship/saas dev",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "cf:types": "pnpm --filter @ship/saas cf:types",
+    "cf:check": "pnpm --filter @ship/web cf:check && pnpm --filter @ship/saas cf:check",
+    "format": "prettier --write ."
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd",
+      "sharp"
+    ]
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.15.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.14.0",
+    "prettier": "3.10.1",
+    "turbo": "2.11.11",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.2"
+  },
+  "engines": {
+    "node": ">=22.12.0",
+    "pnpm": ">=10"
+  },
+  "packageManager": "pnpm@10.33.0"
+
+}

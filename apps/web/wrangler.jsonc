@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "ship-web",
+  "compatibility_date": "2026-11-14",
+  "workers_dev": false,
+  // Template traffic is tiny. Lower the traces sample before a real domain takes production traffic.
+  "observability": {
+    "enabled": true,
+    "logs": { "enabled": true, "head_sampling_rate": 1 },
+    "traces": { "enabled": true, "head_sampling_rate": 1 },
+  },
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "html_handling": "drop-trailing-slash",
+  },
+  "env": {
+    "staging": {
+      "workers_dev": false,
+      "routes": [{ "pattern": "staging.example.com", "custom_domain": true }],
+      "assets": {
+        "directory": "./dist",
+        "not_found_handling": "404-page",
+        "html_handling": "drop-trailing-slash",
+      },
+    },
+    "production": {
+      "workers_dev": false,
+      "routes": [{ "pattern": "www.example.com", "custom_domain": true }],
+      "assets": {
+        "directory": "./dist",
+        "not_found_handling": "404-page",
+        "html_handling": "drop-trailing-slash",
+      },
+    },
+  },
+}

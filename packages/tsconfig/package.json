@@ -1,0 +1,9 @@
+{
+  "name": "@ship/tsconfig",
+  "private": true,
+  "files": [
+    "base.json",
+    "react.json",
+    "worker.json"
+  ]
+}

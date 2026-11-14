@@ -1,0 +1,49 @@
+---
+import Base from '../../layouts/Base.astro'
+import { site } from '../../site'
+
+const description = 'A counter that runs in the browser. The number is not saved.'
+const canonical = new URL('/tools/counter', site.url).href
+---
+
+<Base title={`Counter · ${site.name}`} description={description} canonical={canonical}>
+  <main>
+    <p class="kicker">Tool</p>
+    <h1>Counter</h1>
+    <p class="lede">
+      The buttons change the number on this page. Refreshing resets it, and nothing is sent to a
+      server.
+    </p>
+    <p class="count" id="count" aria-live="polite">0</p>
+    <div class="actions">
+      <button class="button button-primary" type="button" id="increment">Increment</button>
+      <button class="button button-ghost" type="button" id="reset">Reset</button>
+    </div>
+  </main>
+</Base>
+
+<script>
+  const output = document.querySelector('#count')
+  const increment = document.querySelector('#increment')
+  const reset = document.querySelector('#reset')
+  if (
+    !(output instanceof HTMLElement) ||
+    !(increment instanceof HTMLButtonElement) ||
+    !(reset instanceof HTMLButtonElement)
+  ) {
+    throw new Error('Counter markup is missing.')
+  }
+
+  let value = 0
+  const render = () => {
+    output.textContent = String(value)
+  }
+  increment.addEventListener('click', () => {
+    value += 1
+    render()
+  })
+  reset.addEventListener('click', () => {
+    value = 0
+    render()
+  })
+</script>

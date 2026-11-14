@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro'
+import { appConfig } from '../../../app.config'
+
+const description =
+  'A SaaS starter with static public pages, an application shell, and a read-only API on one Cloudflare Worker.'
+const canonical = new URL('/', appConfig.app.url).href
+---
+
+<Base title={`${appConfig.app.name}`} description={description} canonical={canonical}>
+  <main>
+    <p class="kicker">One Worker</p>
+    <h1>A SaaS shell on Cloudflare.</h1>
+    <p class="lede">
+      Public pages are built as HTML. The product shell lives at <a href="/app">/app</a>. The API is
+      read-only until an auth plugin is registered.
+    </p>
+    <div class="actions">
+      <a class="button button-primary" href="/pricing">View pricing</a>
+      <a class="button button-ghost" href="/app">Open the app shell</a>
+    </div>
+  </main>
+</Base>

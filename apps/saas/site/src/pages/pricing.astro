@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro'
+import { appConfig } from '../../../app.config'
+
+const description = 'Display prices for the Ship SaaS template. Checkout is not connected.'
+const canonical = new URL('/pricing', appConfig.app.url).href
+---
+
+<Base title={`Pricing · ${appConfig.app.name}`} description={description} canonical={canonical}>
+  <main>
+    <h1>Pricing</h1>
+    <p class="lede">These figures are configuration, not a catalog with checkout.</p>
+    <ul class="plans">
+      {
+        appConfig.pricing.map((plan) => (
+          <li class="plan">
+            <h2>{plan.name}</h2>
+            <p class="price">{plan.price}</p>
+            <p class="note">{plan.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</Base>
