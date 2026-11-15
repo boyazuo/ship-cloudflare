@@ -27,7 +27,7 @@
 | 模板 | 包名 | 目录 | 部署形态 | 适合 |
 | --- | --- | --- | --- | --- |
 | 内容站 | `@ship/web` | [`apps/web`](apps/web) | Workers Static Assets。没有 Worker 脚本，没有数据库，没有密钥 | 可索引的内容页，以及不保存数据的浏览器工具 |
-| SaaS 骨架 | `@ship/saas` | [`apps/saas`](apps/saas) | 一个 Worker：静态公开页、`/app` 应用壳、Hono API、一个 D1 | 以后要接登录、租户数据和写接口的应用 |
+| SaaS 骨架 | `@ship/saas` | [`apps/saas`](apps/saas) | 一个 Worker：静态公开页、`/app` 应用壳、Hono API、一个 D1 | 以后要接登录和写接口的应用 |
 
 需要账号、支付或服务端数据的功能放在 SaaS 模板里。内容站保持静态，未知路径返回真实 404。
 
@@ -205,9 +205,9 @@ Astro 在构建时生成每个公开 URL。简单工具是独立页面上的浏�
 3. 在 `apps/saas/wrangler.jsonc` 的本地配置和每个环境里声明它需要的绑定，然后运行 `pnpm cf:types`。
 4. 如果它有界面，在应用壳里静态导入 `clientRoutes`。
 
-存放租户数据的表从第一版迁移起就带非空 `tenant_id`。租户 id 来自已验证的会话，不来自调用方自选字段。插件包里的 SQL 只是草案，直到应用把它复制进 `apps/saas/migrations`。
+认证只存用户和会话，不建租户。属于用户的表从第一版迁移起就带非空 `user_id`。用户 id 来自已验证的会话，不来自调用方自选字段。插件包里的 SQL 只是草案，直到应用把它复制进 `apps/saas/migrations`。
 
-计划顺序是 `auth`、`i18n`、`billing`、`storage`、`email`。每个插件开工前另写设计说明。类型和检查函数在 `@ship/plugin-sdk`，启用步骤见 [plugins/README.md](plugins/README.md)。
+模块、插件和页面的顺序见 [后续开发计划](docs/2.%20Ship%20Cloudflare%20后续开发计划.md)。每个插件开工前另写设计说明。类型和检查函数在 `@ship/plugin-sdk`，启用步骤见 [plugins/README.md](plugins/README.md)。
 
 ## 质量与 CI
 
@@ -242,6 +242,7 @@ pnpm cf:types && git diff --exit-code -- apps/saas/worker-configuration.d.ts
 | --- | --- |
 | [技术选型与开发规范](docs/0.%20Cloudflare%20技术选型与开发规范.md) | 平台限额、数据、安全、发布和上线验收 |
 | [技术方案](docs/1.%20Ship%20Cloudflare%20技术方案.md) | 本仓库的目录、构建、路由和插件契约 |
+| [后续开发计划](docs/2.%20Ship%20Cloudflare%20后续开发计划.md) | 骨架之后的模块、插件和页面顺序 |
 | [内容站说明](apps/web/README.md) | 本地预览和部署 |
 | [SaaS 说明](apps/saas/README.md) | 三进程开发、D1 迁移和部署 |
 | [内容站选型单](apps/web/SELECTION.md) | 该模板的选型记录 |

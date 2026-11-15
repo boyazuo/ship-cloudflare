@@ -2,8 +2,7 @@ import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 /**
  * Plugin tables are added here by editing this file.
- * A table that stores tenant data must include a non-null tenant_id in the migration that creates it.
- * This template has no tenant rows yet, because there is no session to take the id from.
+ * Auth does not add tenants. A user-owned table includes a non-null user_id in the migration that creates it.
  */
 export const appMeta = sqliteTable('app_meta', {
   key: text('key').primaryKey(),

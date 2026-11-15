@@ -2,7 +2,7 @@ import type { Hono } from 'hono';
 
 /**
  * A plugin is imported statically by the app. Workers cannot discover packages at runtime.
- * Business tables that belong to a tenant include tenant_id from their first migration.
+ * Auth is users and sessions only. A user-owned table includes user_id from its first migration.
  */
 export interface ShipPlugin<Bindings extends object = Record<string, never>> {
   id: string;

@@ -5,7 +5,7 @@
 渲染框架与版本、Node、Wrangler、compatibility_date：Astro 7.4.12（静态输出，无 Cloudflare adapter）、Vite 8.3.8、React 19.3.1、TanStack Router 1.170.46、Hono 4.13.18、Drizzle ORM 0.45.4、Zod 4.6.7、Tailwind CSS 4.3.5、TypeScript 5.9.3、Node.js 22、pnpm 10.33.0、Wrangler 4.162.0、Vitest 4.1.12、compatibility_date 2026-11-14。Astro 使用当前稳定主版本 7，而不是方案草稿里的 5。TypeScript 不用 7.0.2，因为 typescript-eslint 8.72.2 要求 typescript <6.1。Vitest 不用 5，因为 @cloudflare/vitest-plugin 1.8.2 要求 vitest ^4.1.0。原先的 @cloudflare/vitest-pool-workers 已改名为这个包。不手写 nodejs_compat。
 Worker 数量、Static Assets 文件数估计、路由、是否开启 Workers Cache 及缓存键：一个 Worker。公开 HTML 由资产层返回。run_worker_first 只包含 /api/_、/app 和 /app/_。文件数远低于上限。不开启 Workers Cache。公开页使用 404-page，真实 404。
 D1：库数量、是否固定分片、预计容量和写入、索引、Sessions / bookmark：一个库，不分片。本期一张 app_meta 表，按主键读取 schema_version，写入只发生在迁移插入的那一行。不用 Sessions API，因为没有跨请求的读己之写。本地 ID 为全零。staging 与 production 的 UUID 是占位，部署前替换。
-租户模型：共享表 / 固定分片 / 一租户一库；tenant_id 的来源：不适用。没有会话，所以本期不建带 tenant_id 的业务表。以后的租户表从创建它的那次迁移就带非空 tenant_id，值来自已校验的会话。
+租户模型：共享表 / 固定分片 / 一租户一库；tenant_id 的来源：不适用。认证只做用户，不建租户。没有会话，所以本期不建带 user_id 的业务表。以后属于用户的表从创建它的那次迁移就带非空 user_id，值来自已校验的会话。
 KV：用途、可接受的陈旧时间；权威源在：不适用。没有允许延迟的公开配置。
 R2：桶、私有或公开、预签名有效期、CORS、备份：不适用。没有文件。存储插件到来时再加私有桶。
 Durable Objects：实体键、事务边界、热点；若无，写不适用：不适用。没有单实体协调。
