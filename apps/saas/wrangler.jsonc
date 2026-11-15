@@ -12,7 +12,18 @@
   },
   "vars": {
     "APP_ENV": "development",
+    "AUTH_EMAIL_FROM": "noreply@example.com",
   },
+  "secrets": {
+    "required": ["TURNSTILE_SECRET_KEY", "RESEND_API_KEY"],
+  },
+  "ratelimits": [
+    {
+      "name": "LOGIN_RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": { "limit": 10, "period": 60 },
+    },
+  ],
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
@@ -31,7 +42,15 @@
   "env": {
     "staging": {
       "workers_dev": false,
-      "vars": { "APP_ENV": "staging" },
+      "vars": { "APP_ENV": "staging", "AUTH_EMAIL_FROM": "noreply@example.com" },
+      "secrets": { "required": ["TURNSTILE_SECRET_KEY", "RESEND_API_KEY"] },
+      "ratelimits": [
+        {
+          "name": "LOGIN_RATE_LIMITER",
+          "namespace_id": "1002",
+          "simple": { "limit": 10, "period": 60 },
+        },
+      ],
       "routes": [{ "pattern": "staging.example.com", "custom_domain": true }],
       "assets": {
         "directory": "./dist",
@@ -52,7 +71,15 @@
     },
     "production": {
       "workers_dev": false,
-      "vars": { "APP_ENV": "production" },
+      "vars": { "APP_ENV": "production", "AUTH_EMAIL_FROM": "noreply@example.com" },
+      "secrets": { "required": ["TURNSTILE_SECRET_KEY", "RESEND_API_KEY"] },
+      "ratelimits": [
+        {
+          "name": "LOGIN_RATE_LIMITER",
+          "namespace_id": "1003",
+          "simple": { "limit": 10, "period": 60 },
+        },
+      ],
       "routes": [{ "pattern": "www.example.com", "custom_domain": true }],
       "assets": {
         "directory": "./dist",

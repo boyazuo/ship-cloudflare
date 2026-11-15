@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { createFileRoute } from '@tanstack/react-router';
+import { Link, createFileRoute } from '@tanstack/react-router';
+import { useSession } from '@ship/auth/client';
 import { z } from 'zod';
 
 const metaSchema = z.object({
@@ -16,6 +17,7 @@ function AppHome() {
   const [schemaVersion, setSchemaVersion] = useState<string | null>(null);
   const [plugins, setPlugins] = useState<string[] | null>(null);
   const [failed, setFailed] = useState(false);
+  const session = useSession();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -35,36 +37,58 @@ function AppHome() {
   }, []);
 
   const pending = !failed && schemaVersion === null;
+  const title =
+    session.status === 'loading'
+      ? 'Home'
+      : session.user
+        ? session.user.name
+        : 'Sign in to continue';
+  const lede =
+    session.status === 'loading'
+      ? 'Reading session…'
+      : session.user
+        ? session.user.email
+        : 'Writes stay closed until a session exists.';
 
   return (
-    <main id="content">
-      <h1 className="text-3xl font-semibold tracking-tight">No session yet.</h1>
-      <p className="mt-3 max-w-lg text-base leading-7 text-muted">
-        Writes return auth_required until the auth plugin is enabled. This page only reads /api/meta.
-      </p>
-      <dl
-        className="mt-8 divide-y divide-border overflow-hidden rounded-xl border border-border bg-card"
-        aria-busy={pending}
-      >
-        <div className="flex items-baseline justify-between gap-6 px-5 py-4">
-          <dt className="text-sm text-muted">Schema version</dt>
-          <dd className="text-sm font-medium tabular-nums" data-testid="schema-version">
-            {failed ? 'Could not read' : (schemaVersion ?? 'Reading')}
-          </dd>
+    <main id="content" className="page">
+      <header className="page-head">
+        <h1>{title}</h1>
+        <p className="page-lede">{lede}</p>
+      </header>
+      {session.status === 'anonymous' ? (
+        <div className="page-actions">
+          <Link to="/sign-in" className="text-button">
+            Sign in
+          </Link>
+          <Link to="/sign-up" className="text-button-ghost">
+            Create an account
+          </Link>
         </div>
-        <div className="flex items-baseline justify-between gap-6 px-5 py-4">
-          <dt className="text-sm text-muted">Plugins</dt>
-          <dd className="text-right text-sm font-medium">
-            {failed
-              ? 'Could not read'
-              : plugins === null
-                ? 'Reading'
-                : plugins.length === 0
-                  ? 'None enabled'
-                  : plugins.join(', ')}
-          </dd>
-        </div>
-      </dl>
+      ) : null}
+      <section className="page-section" aria-busy={pending} aria-label="This Worker">
+        <h2>This Worker</h2>
+        <dl className="fact-list">
+          <div>
+            <dt>Schema version</dt>
+            <dd className="tabular-nums" data-testid="schema-version">
+              {failed ? 'Could not read' : (schemaVersion ?? 'Reading…')}
+            </dd>
+          </div>
+          <div>
+            <dt>Plugins</dt>
+            <dd>
+              {failed
+                ? 'Could not read'
+                : plugins === null
+                  ? 'Reading…'
+                  : plugins.length === 0
+                    ? 'None enabled'
+                    : plugins.join(', ')}
+            </dd>
+          </div>
+        </dl>
+      </section>
     </main>
   );
 }

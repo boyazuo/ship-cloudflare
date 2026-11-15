@@ -2,7 +2,7 @@
 
 一套可直接克隆、本地运行并部署到 Cloudflare 的开源模板。同一个 monorepo 里有两个互相独立的部署单元：纯静态内容站，以及带公开页、应用壳、只读 API 和一个 D1 的 SaaS 骨架。
 
-认证、支付、国际化和文件存储只定了插件契约，还没有实现。平台限额、安全和发布规则以 [技术选型与开发规范](docs/0.%20Cloudflare%20技术选型与开发规范.md) 为准；目录、构建和数据路径的实现说明见 [技术方案](docs/1.%20Ship%20Cloudflare%20技术方案.md)。
+SaaS 模板已经接上邮箱密码认证。支付、国际化和文件存储只定了插件契约，还没有实现。平台限额、安全和发布规则以 [技术选型与开发规范](docs/0.%20Cloudflare%20技术选型与开发规范.md) 为准；目录、构建和数据路径的实现说明见 [技术方案](docs/1.%20Ship%20Cloudflare%20技术方案.md)。
 
 ## 目录
 
@@ -27,7 +27,7 @@
 | 模板 | 包名 | 目录 | 部署形态 | 适合 |
 | --- | --- | --- | --- | --- |
 | 内容站 | `@ship/web` | [`apps/web`](apps/web) | Workers Static Assets。没有 Worker 脚本，没有数据库，没有密钥 | 可索引的内容页，以及不保存数据的浏览器工具 |
-| SaaS 骨架 | `@ship/saas` | [`apps/saas`](apps/saas) | 一个 Worker：静态公开页、`/app` 应用壳、Hono API、一个 D1 | 以后要接登录和写接口的应用 |
+| SaaS 骨架 | `@ship/saas` | [`apps/saas`](apps/saas) | 一个 Worker：静态公开页、`/app` 应用壳、Hono API、一个 D1 | 需要登录和写接口的应用 |
 
 需要账号、支付或服务端数据的功能放在 SaaS 模板里。内容站保持静态，未知路径返回真实 404。
 
@@ -49,10 +49,10 @@ apps/saas
   浏览器 → /  /pricing  /privacy  /terms  带哈希的静态文件 → 资产层
          → 未知公开路径                  → 404 页面，状态码 404
          → /app  /app/*                  → Worker → 对应文件，否则 /app/index.html
-         → /api/*                         → Worker → Hono → D1.app_meta
+         → /api/*                         → Worker → Hono → D1
 ```
 
-公开 HTML 不读数据库、不写 Cookie。`/api/*` 的响应带 `Cache-Control: private, no-store`。写请求在认证插件接上之前默认拒绝。
+公开 HTML 不读数据库、不写 Cookie。`/api/*` 的响应带 `Cache-Control: private, no-store`。未登录的写请求返回 `auth_required`。变更状态的请求还要校验 Origin。
 
 ## 技术栈
 
@@ -90,7 +90,7 @@ ship-cloudflare/
 │   ├── worker-kit/          # @ship/worker-kit，Hono 工厂、错误体、安全响应头
 │   ├── plugin-sdk/          # @ship/plugin-sdk，插件类型，无运行时副作用
 │   └── tsconfig/            # 共享 TypeScript 配置
-├── plugins/                 # 本期只有启用说明，没有插件包
+├── plugins/                 # auth 插件，以及以后启用插件的说明
 └── docs/                    # 选型规范与实现方案
 ```
 
@@ -139,7 +139,7 @@ pnpm --filter @ship/web preview    # http://127.0.0.1:4173
 pnpm --filter @ship/saas preview   # http://127.0.0.1:8787
 ```
 
-内容站预览应看到：`/`、`/guide`、`/tools/counter`、`/privacy`、`/terms` 为 200，刷新工具页仍是该页，未知路径为 404。SaaS 预览应看到：`/`、`/pricing`、`/privacy`、`/terms` 为 200，未知公开路径为 404，刷新 `/app/settings` 仍是应用壳，`GET /api/health` 与 `GET /api/meta` 带 `Cache-Control: private, no-store`，`POST /api/meta` 返回 401，错误体为 `{ "error": "auth_required" }`。
+内容站预览应看到：`/`、`/guide`、`/tools/counter`、`/privacy`、`/terms` 为 200，刷新工具页仍是该页，未知路径为 404。SaaS 预览应看到：`/`、`/pricing`、`/privacy`、`/terms` 为 200，未知公开路径为 404，刷新 `/app/settings` 仍是应用壳，`GET /api/health` 与 `GET /api/meta` 带 `Cache-Control: private, no-store`，`POST /api/meta` 返回 401，错误体为 `{ "error": "auth_required" }`。注册后 `/app` 显示当前用户。
 
 ## 脚本
 
@@ -188,13 +188,14 @@ Astro 在构建时生成每个公开 URL。简单工具是独立页面上的浏�
 | --- | --- |
 | `/` | 可索引的首页 |
 | `/pricing` | 静态方案名称和价格文案，没有结账 |
-| `/privacy`、`/terms` | 法律页。数据库只有 `app_meta`，没有账户 |
-| `/app` | 应用首页。认证插件启用前没有会话 |
-| `/app/settings` | 空状态，用来验收深链 |
+| `/privacy`、`/terms` | 法律页。隐私页写明账户字段、会话和删除 |
+| `/app` | 应用首页。登录后显示当前用户 |
+| `/app/sign-in`、`/app/sign-up`、`/app/reset` | 登录、注册、重置密码 |
+| `/app/settings` | 资料、会话、导出和删除账户 |
 | `GET /api/health` | `{ "ok": true }`，不访问 D1 |
 | `GET /api/meta` | 读取 `app_meta`，返回应用名和已启用插件 id |
 
-`wrangler.jsonc` 里 staging 与 production 的 `database_id` 是占位，不能拿去部署。先用 `wrangler d1 create` 得到 UUID，再替换主机名。生产环境的远程迁移需要单独批准。密钥以后用 `wrangler secret put` 写入，不放进 `vars` 或 Git。完整步骤见 [apps/saas/README.md](apps/saas/README.md)。
+`wrangler.jsonc` 里 staging 与 production 的 `database_id` 是占位，不能拿去部署。先用 `wrangler d1 create` 得到 UUID，再替换主机名。生产环境的远程迁移需要单独批准。`TURNSTILE_SECRET_KEY` 和 `RESEND_API_KEY` 用 `wrangler secret put` 写入，不放进 `vars` 或 Git。本地占位见 `apps/saas/.dev.vars.example`。完整步骤见 [apps/saas/README.md](apps/saas/README.md)。
 
 代码回滚不会恢复 D1。发布和回滚按规范第 12 节和第 15 节执行，全文见 [技术选型与开发规范](docs/0.%20Cloudflare%20技术选型与开发规范.md)。
 
@@ -207,7 +208,7 @@ Astro 在构建时生成每个公开 URL。简单工具是独立页面上的浏�
 3. 在 `apps/saas/wrangler.jsonc` 的本地配置和每个环境里声明它需要的绑定，然后运行 `pnpm cf:types`。
 4. 如果它有界面，在应用壳里静态导入 `clientRoutes`。
 
-认证只存用户和会话，不建租户。属于用户的表从第一版迁移起就带非空 `user_id`。用户 id 来自已验证的会话，不来自调用方自选字段。插件包里的 SQL 只是草案，直到应用把它复制进 `apps/saas/migrations`。
+`auth` 已经按这四步接上。它只存用户和会话，不建租户。用户 id 来自已验证的会话，不来自调用方自选字段。设计说明在 [plugins/auth/DESIGN.md](plugins/auth/DESIGN.md)。以后的插件包里的 SQL 只是草案，直到应用把它复制进 `apps/saas/migrations`。
 
 模块、插件和页面的顺序见 [后续开发计划](docs/2.%20Ship%20Cloudflare%20后续开发计划.md)。每个插件开工前另写设计说明。类型和检查函数在 `@ship/plugin-sdk`，启用步骤见 [plugins/README.md](plugins/README.md)。
 
@@ -232,7 +233,7 @@ pnpm cf:types && git diff --exit-code -- apps/saas/worker-configuration.d.ts
 
 本期交付 monorepo、内容站模板和 SaaS 骨架。下面这些能力留到对应插件，不在默认依赖里：
 
-- 注册、登录、会话、权限、支付、邮件、短信、国际化和文件上传
+- 权限、支付、完整邮件插件、短信、国际化和文件上传
 - R2、KV、Queues、Workflows、Durable Objects
 - Next.js、Nuxt、TanStack Start，以及服务端渲染
 
@@ -249,6 +250,6 @@ pnpm cf:types && git diff --exit-code -- apps/saas/worker-configuration.d.ts
 | [SaaS 说明](apps/saas/README.md) | 三进程开发、D1 迁移和部署 |
 | [内容站选型单](apps/web/SELECTION.md) | 该模板的选型记录 |
 | [SaaS 选型单](apps/saas/SELECTION.md) | 该模板的选型记录 |
-| [插件约定](plugins/README.md) | 以后如何把插件接进 SaaS |
+| [插件约定](plugins/README.md) | `auth` 的接入方式，以及以后如何接插件 |
 
 本仓库以 [MIT 许可证](LICENSE) 发布。

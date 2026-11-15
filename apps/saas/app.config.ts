@@ -5,6 +5,9 @@ const appConfigSchema = z.object({
     name: z.string().min(1),
     url: z.url(),
   }),
+  turnstile: z.object({
+    siteKey: z.string().min(1),
+  }),
   pricing: z
     .array(
       z.object({
@@ -21,6 +24,9 @@ export const appConfig = appConfigSchema.parse({
   app: {
     name: 'Ship SaaS',
     url: 'http://localhost:8787',
+  },
+  turnstile: {
+    siteKey: '1x00000000000000000000AA',
   },
   pricing: [
     {

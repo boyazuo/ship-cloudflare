@@ -4,11 +4,12 @@ import type { Hono } from 'hono';
  * A plugin is imported statically by the app. Workers cannot discover packages at runtime.
  * Auth is users and sessions only. A user-owned table includes user_id from its first migration.
  */
-export interface ShipPlugin<Bindings extends object = Record<string, never>> {
+export interface ShipPlugin {
   id: string;
   version: string;
   tables?: Readonly<Record<string, unknown>>;
-  mount?: (app: Hono<{ Bindings: Bindings }>) => void;
+  /** Generic because Hono's Bindings parameter is invariant across apps. */
+  mount?: <Bindings extends object>(app: Hono<{ Bindings: Bindings }>) => void;
   requiredBindings?: readonly string[];
   clientRoutes?: string;
 }

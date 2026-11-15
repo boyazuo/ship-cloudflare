@@ -1,10 +1,10 @@
 # Ship SaaS
 
-一个 Worker：可索引的公开页、`/app` 下的应用壳、只读 API，以及一个 D1。没有匿名写接口。
+一个 Worker：可索引的公开页、`/app` 下的应用壳、API，以及一个 D1。认证是邮箱和密码。没有匿名写接口。
 
 ## 本地
 
-三个进程一起开。第一次会先做完整构建，让 Wrangler 有资产可服务。
+三个进程一起开。第一次会先做完整构建，让 Wrangler 有资产可服务。把 `.dev.vars.example` 复制成 `.dev.vars`。占位密钥 `re_local_unset` 让重置密码返回 `email_unconfigured`，注册和登录不需要真实的 Resend 密钥。Turnstile 的站点密钥是文档里的始终通过测试密钥，只在 `APP_ENV=development` 时配合对应的测试 secret 使用。
 
 ```bash
 pnpm --filter @ship/saas dev
@@ -29,6 +29,8 @@ pnpm --filter @ship/saas preview
 - 刷新 `/app/settings` 仍是应用壳。
 - `GET /api/health` 与 `GET /api/meta` 带 `Cache-Control: private, no-store`。
 - `POST /api/meta` 返回 401，错误体是 `{ "error": "auth_required" }`。
+- 在 `/app/sign-up` 注册后，`/app` 显示该用户。登出后刷新 `/app` 不再显示。
+- 重置密码在占位密钥下显示 `email_unconfigured`。
 
 本地迁移由 `dev` 和 `preview` 在启动 Wrangler 前执行。需要单独跑时：
 
@@ -62,6 +64,6 @@ pnpm --filter @ship/saas exec wrangler deploy --env staging
 
 已应用的迁移文件只追加、不修改。绑定变更后运行 `pnpm cf:types`，并提交 `worker-configuration.d.ts`。
 
-这个模板没有密钥。以后的密钥用 `wrangler secret put <NAME> --env <environment>` 写入，不放进 `vars` 或 Git。
+`TURNSTILE_SECRET_KEY` 和 `RESEND_API_KEY` 用 `wrangler secret put <NAME> --env <environment>` 写入，不放进 `vars` 或 Git。本地只放在 `.dev.vars`。发信地址 `AUTH_EMAIL_FROM` 是公开 var，默认 `noreply@example.com`，上线前换成已验证的发信域。
 
 发布、回滚和验收按仓库规范第 12 节和第 15 节。代码回滚不恢复 D1。

@@ -16,8 +16,8 @@ describe('saas API', () => {
     expect(response.headers.get('Cache-Control')).toBe('private, no-store');
     await expect(response.json()).resolves.toEqual({
       name: 'Ship SaaS',
-      schemaVersion: '1',
-      plugins: [],
+      schemaVersion: '2',
+      plugins: ['auth'],
     });
   });
 
@@ -31,6 +31,7 @@ describe('saas API', () => {
   it('rejects writes until the auth plugin is enabled', async () => {
     const response = await exports.default.fetch('https://example.com/api/meta', {
       method: 'POST',
+      headers: { origin: 'https://example.com' },
     });
     expect(response.status).toBe(401);
     expect(response.headers.get('Cache-Control')).toBe('private, no-store');

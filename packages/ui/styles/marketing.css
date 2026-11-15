@@ -57,13 +57,9 @@ a {
 }
 
 .shell {
-  width: min(40rem, calc(100% - 2.5rem));
+  width: min(68rem, calc(100% - 3rem));
   margin-inline: auto;
   padding-bottom: 5rem;
-}
-
-.shell.wide {
-  width: min(68rem, calc(100% - 3rem));
 }
 
 .nav {
@@ -118,6 +114,90 @@ a {
   box-shadow: inset 0 -2px 0 var(--foreground);
 }
 
+.account {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.account > a:not(.button) {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.account > a:not(.button):hover {
+  color: var(--foreground);
+}
+
+.account-menu {
+  position: relative;
+}
+
+.account-menu summary {
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-foreground);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+}
+
+.account-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.account-menu summary:hover {
+  background: var(--accent-hover);
+}
+
+.account-panel {
+  position: absolute;
+  right: 0;
+  z-index: 5;
+  min-width: 12rem;
+  margin-top: 0.45rem;
+  padding: 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.account-panel p {
+  margin: 0;
+  padding: 0.4rem 0.6rem 0.15rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.account-panel a,
+.account-panel button {
+  display: block;
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border: 0;
+  border-radius: calc(var(--radius) - 2px);
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  font-size: 0.875rem;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.account-panel a:hover,
+.account-panel button:hover {
+  background: var(--inset);
+}
+
 h1 {
   font-size: clamp(2.6rem, 5vw, 4.15rem);
   font-weight: 600;
@@ -133,7 +213,6 @@ h2 {
 }
 
 .lede {
-  max-width: 34rem;
   margin-top: 1.15rem;
   color: var(--muted);
   font-size: 1.125rem;
@@ -346,7 +425,6 @@ h2 {
 }
 
 .prose p {
-  max-width: 38rem;
   margin-top: 0.75rem;
 }
 

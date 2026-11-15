@@ -1,4 +1,10 @@
-import { apiError, createApp, rejectUnauthenticatedWrite } from '@ship/worker-kit';
+import { requirePrincipal } from '@ship/auth';
+import {
+  apiError,
+  createApp,
+  rejectMismatchedOrigin,
+  rejectUnauthenticatedWrite,
+} from '@ship/worker-kit';
 import { checkBindings, listPluginIds } from '@ship/plugin-sdk';
 import { appConfig } from '../app.config';
 import { serveAppShell } from './assets';
@@ -22,8 +28,18 @@ export function createSaasApp() {
       }
     }
     if (missingBindings.length > 0) return apiError(c, 'plugin_binding_missing', 500);
+    if (c.req.method !== 'GET' && c.req.method !== 'HEAD') {
+      const origins = [new URL(c.req.url).origin];
+      if (c.env.APP_ENV === 'development') {
+        origins.push('http://127.0.0.1:5174', 'http://localhost:5174');
+      }
+      const blocked = rejectMismatchedOrigin(c, origins);
+      if (blocked) return blocked;
+    }
     await next();
   });
+
+  for (const plugin of plugins) plugin.mount?.(app);
 
   app.get('/api/health', (c) => c.json({ ok: true }));
 
@@ -39,8 +55,18 @@ export function createSaasApp() {
     });
   });
 
-  app.on(['POST', 'PUT', 'PATCH', 'DELETE'], '/api/*', (c) => rejectUnauthenticatedWrite(c));
-  app.on(['POST', 'PUT', 'PATCH', 'DELETE'], '/api', (c) => rejectUnauthenticatedWrite(c));
+  const rejectUnknownWrite = async (c: {
+    req: { raw: Request };
+    env: Env;
+    json: (body: unknown, status?: number) => Response;
+  }) => {
+    const principal = await requirePrincipal(c.req.raw, c.env.DB);
+    if (!principal)
+      return rejectUnauthenticatedWrite(c as Parameters<typeof rejectUnauthenticatedWrite>[0]);
+    return apiError(c as Parameters<typeof apiError>[0], 'not_found', 404);
+  };
+  app.on(['POST', 'PUT', 'PATCH', 'DELETE'], '/api/*', (c) => rejectUnknownWrite(c));
+  app.on(['POST', 'PUT', 'PATCH', 'DELETE'], '/api', (c) => rejectUnknownWrite(c));
   app.all('/api', (c) => apiError(c, 'not_found', 404));
 
   app.all('/app', (c) => serveAppShell(c.req.raw, c.env.ASSETS));

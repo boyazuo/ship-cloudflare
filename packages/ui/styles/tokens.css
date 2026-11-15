@@ -9,6 +9,7 @@
   --accent-foreground: #ffffff;
   --accent-hover: #2c313c;
   --signal: #e24a0b;
+  --danger: #8d2f2f;
   --sans: ui-sans-serif, system-ui, 'Segoe UI', sans-serif;
   --radius: 0.5rem;
 }

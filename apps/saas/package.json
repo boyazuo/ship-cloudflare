@@ -16,6 +16,7 @@
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
+    "@ship/auth": "workspace:*",
     "@ship/plugin-sdk": "workspace:*",
     "@ship/ui": "workspace:*",
     "@ship/worker-kit": "workspace:*",

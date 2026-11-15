@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro'
 import { appConfig } from '../../../app.config'
 
-const description = 'What this SaaS template stores. The only database row is operational, not personal.'
+const description = 'What this site stores about an account, how long it is kept, and how to delete it.'
 const canonical = new URL('/privacy', appConfig.app.url).href
 ---
 
@@ -10,23 +10,31 @@ const canonical = new URL('/privacy', appConfig.app.url).href
   <main id="content" class="prose">
     <h1>Privacy</h1>
     <p class="lede">
-      Public pages are static HTML. They do not read the database and they do not set cookies.
+      An account stores the name and email you submit, a password hash, and the sessions you open.
     </p>
-    <h2>What is stored</h2>
+    <h2>Account data</h2>
     <p>
-      The database has one table, app_meta. It holds a schema version so the template can show that
-      migrations ran. That row is operational data, not information about a person. The read-only
-      API can return the application name and the list of enabled plugins.
-    </p>
-    <h2>The application shell</h2>
-    <p>
-      <a href="/app">/app</a> does not sign anyone in. Requests that would change data are refused.
-      This site has no account.
+      Registration stores your name, email address, and a password hash. The password itself is not
+      stored. A session is a random id kept in an HttpOnly cookie. The database stores only a hash
+      of that id, plus when the session was created and when it expires. Sessions last seven days.
     </p>
     <p>
-      The <a href="/terms">terms</a> match this site as published. A later change that starts keeping
-      personal information has to rewrite this page in the same change, including what is kept, how
-      long it is kept, and how it is deleted.
+      A password reset stores a hash of a one-hour link, not the link itself. Sign-in, sign-out, and
+      account deletion write an audit row with the user id and the action. The audit row does not
+      include the email address or the password.
+    </p>
+    <h2>How long it is kept</h2>
+    <p>
+      The account, password hash, and sessions stay until you delete the account from
+      <a href="/app/settings">settings</a>. Deletion removes the user and every session. The audit
+      row for that deletion remains, with the user id only. Public pages still do not read the
+      database.
+    </p>
+    <h2>Export</h2>
+    <p>
+      Settings can download the name, email, account id, and session times. The download does not
+      include the password hash or session secrets. The <a href="/terms">terms</a> describe the
+      site as published.
     </p>
   </main>
 </Base>

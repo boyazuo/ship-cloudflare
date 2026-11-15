@@ -6,10 +6,9 @@ interface Props {
   title: string
   description: string
   canonical: string
-  wide?: boolean
 }
 
-const { title, description, canonical, wide = false } = Astro.props
+const { title, description, canonical } = Astro.props
 const path = Astro.url.pathname.replace(/\/$/, '') || '/'
 const links = [
   { href: '/guide', label: 'Guide' },
@@ -29,7 +28,7 @@ const links = [
   </head>
   <body>
     <a class="skip" href="#content">Skip to content</a>
-    <div class:list={['shell', { wide }]}>
+    <div class="shell">
       <header class="nav">
         <a class="brand" href="/">
           <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">

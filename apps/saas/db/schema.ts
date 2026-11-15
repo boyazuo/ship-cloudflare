@@ -1,3 +1,4 @@
+import { auditEvent, session, user } from '@ship/auth';
 import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 /**
@@ -9,6 +10,11 @@ export const appMeta = sqliteTable('app_meta', {
   value: text('value').notNull(),
 });
 
+export { auditEvent, session, user };
+
 export const schema = {
   appMeta,
+  user,
+  session,
+  auditEvent,
 };

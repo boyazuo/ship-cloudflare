@@ -7,14 +7,14 @@ const description =
 const canonical = new URL('/', appConfig.app.url).href
 ---
 
-<Base title={appConfig.app.name} description={description} canonical={canonical} wide>
+<Base title={appConfig.app.name} description={description} canonical={canonical}>
   <main id="content">
     <section class="hero">
       <div>
         <h1>A SaaS shell on one Worker.</h1>
         <p class="lede">
-          Public pages are built as HTML. The product lives at <a href="/app">/app</a>. The API stays
-          read-only until an auth plugin is registered.
+          Public pages are built as HTML. The product lives at <a href="/app">/app</a>. Signing in
+          opens a session stored in D1.
         </p>
         <div class="actions">
           <a class="button button-primary" href="/pricing">View pricing</a>
@@ -32,9 +32,9 @@ const canonical = new URL('/', appConfig.app.url).href
             <span>Settings</span>
           </div>
           <div class="mini-main">
-            <p class="mini-title">No session yet.</p>
-            <p class="mini-row"><span>Schema</span><b>1</b></p>
-            <p class="mini-row"><span>Plugins</span><b>None</b></p>
+            <p class="mini-title">Sign in to continue.</p>
+            <p class="mini-row"><span>Schema</span><b>2</b></p>
+            <p class="mini-row"><span>Plugins</span><b>auth</b></p>
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@ const canonical = new URL('/', appConfig.app.url).href
       </div>
       <div>
         <h2>API</h2>
-        <p>Reads return the app name and enabled plugins. Writes are refused until auth is on.</p>
+        <p>Reads return the app name and enabled plugins. Writes require a session.</p>
       </div>
     </section>
   </main>

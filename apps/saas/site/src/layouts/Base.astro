@@ -6,10 +6,9 @@ interface Props {
   title: string
   description: string
   canonical: string
-  wide?: boolean
 }
 
-const { title, description, canonical, wide = false } = Astro.props
+const { title, description, canonical } = Astro.props
 const path = Astro.url.pathname.replace(/\/$/, '') || '/'
 const links = [
   { href: '/pricing', label: 'Pricing' },
@@ -29,7 +28,7 @@ const links = [
   </head>
   <body>
     <a class="skip" href="#content">Skip to content</a>
-    <div class:list={['shell', { wide }]}>
+    <div class="shell">
       <header class="nav">
         <a class="brand" href="/">
           <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
@@ -47,6 +46,10 @@ const links = [
             ))
           }
         </nav>
+        <div class="account" id="account">
+          <a href="/app/sign-in">Sign in</a>
+          <a class="button button-primary" href="/app/sign-up">Create account</a>
+        </div>
       </header>
       <slot />
       <footer class="legal">
@@ -58,5 +61,52 @@ const links = [
         </a>
       </footer>
     </div>
+    <script>
+      const slot = document.getElementById('account');
+      if (slot) {
+        fetch('/api/auth/session')
+          .then(async (response) => {
+            if (!response.ok) return;
+            const body: unknown = await response.json();
+            if (
+              typeof body !== 'object' ||
+              body === null ||
+              !('user' in body) ||
+              typeof body.user !== 'object' ||
+              body.user === null ||
+              !('name' in body.user) ||
+              typeof body.user.name !== 'string'
+            ) {
+              return;
+            }
+            const name = body.user.name.trim();
+            if (!name) return;
+            const details = document.createElement('details');
+            details.className = 'account-menu';
+            const summary = document.createElement('summary');
+            summary.textContent = name.charAt(0).toUpperCase();
+            summary.setAttribute('aria-label', name);
+            const panel = document.createElement('div');
+            panel.className = 'account-panel';
+            const label = document.createElement('p');
+            label.textContent = name;
+            const settings = document.createElement('a');
+            settings.href = '/app/settings';
+            settings.textContent = 'Settings';
+            const signOut = document.createElement('button');
+            signOut.type = 'button';
+            signOut.textContent = 'Sign out';
+            signOut.addEventListener('click', () => {
+              void fetch('/api/auth/sign-out', { method: 'POST' }).then(() => {
+                window.location.assign('/');
+              });
+            });
+            panel.append(label, settings, signOut);
+            details.append(summary, panel);
+            slot.replaceChildren(details);
+          })
+          .catch(() => undefined);
+      }
+    </script>
   </body>
 </html>

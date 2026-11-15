@@ -12,6 +12,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-hover: var(--accent-hover);
   --color-signal: var(--signal);
+  --color-danger: var(--danger);
   --font-sans: var(--sans);
   --radius-lg: var(--radius);
 }
