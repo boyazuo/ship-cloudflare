@@ -24,7 +24,7 @@ pnpm --filter @ship/saas preview
 
 在 8787 上确认：
 
-- `/`、`/pricing`、`/privacy`、`/terms` 是 200，源码里有正文。
+- `/`、`/features`、`/pricing`、`/changelog`、`/privacy`、`/terms` 是 200，源码里有正文。
 - 未知公开路径是 404。
 - 刷新 `/app/settings` 仍是应用壳。
 - `GET /api/health` 与 `GET /api/meta` 带 `Cache-Control: private, no-store`。

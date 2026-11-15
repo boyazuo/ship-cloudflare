@@ -11,8 +11,9 @@ interface Props {
 const { title, description, canonical } = Astro.props
 const path = Astro.url.pathname.replace(/\/$/, '') || '/'
 const links = [
+  { href: '/features', label: 'Features' },
   { href: '/pricing', label: 'Pricing' },
-  { href: '/app', label: 'App' },
+  { href: '/changelog', label: 'Changelog' },
 ]
 ---
 
@@ -90,6 +91,9 @@ const links = [
             panel.className = 'account-panel';
             const label = document.createElement('p');
             label.textContent = name;
+            const openApp = document.createElement('a');
+            openApp.href = '/app';
+            openApp.textContent = 'Open app';
             const settings = document.createElement('a');
             settings.href = '/app/settings';
             settings.textContent = 'Settings';
@@ -101,7 +105,7 @@ const links = [
                 window.location.assign('/');
               });
             });
-            panel.append(label, settings, signOut);
+            panel.append(label, openApp, settings, signOut);
             details.append(summary, panel);
             slot.replaceChildren(details);
           })

@@ -20,7 +20,7 @@ pnpm --filter @ship/web preview
 
 在 <http://127.0.0.1:4173> 确认：
 
-- `/`、`/guide`、`/tools/counter`、`/privacy`、`/terms` 返回 200，源码里有正文。
+- `/`、`/guide`、`/notes`、`/tools/counter`、`/changelog`、`/privacy`、`/terms` 返回 200，源码里有正文。
 - 刷新 `/tools/counter` 仍是这一页。Increment 改变页面上的数字，Reset 回到 0。
 - 未知路径返回 404 页面，状态码是 404。
 

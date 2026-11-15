@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro'
+import { appConfig } from '../../../app.config'
+
+const description = 'Static pages, an application shell, and a session-backed API on one Worker.'
+const canonical = new URL('/features', appConfig.app.url).href
+---
+
+<Base title={`Features · ${appConfig.app.name}`} description={description} canonical={canonical}>
+  <main id="content">
+    <h1>Features</h1>
+    <p class="lede">Three surfaces on one Worker. Public HTML does not read the database.</p>
+    <section class="facts" aria-label="What ships in this template">
+      <div>
+        <h2>Static pages</h2>
+        <p>Home, pricing, and this page are built as HTML. They do not set a cookie.</p>
+      </div>
+      <div>
+        <h2>Application shell</h2>
+        <p>
+          Signed-in screens live at <a href="/app">/app</a>. Refreshing a deep link stays in the
+          shell.
+        </p>
+      </div>
+      <div>
+        <h2>Sessions</h2>
+        <p>Sign-in stores a session in D1. A write without that session is refused.</p>
+      </div>
+    </section>
+  </main>
+</Base>

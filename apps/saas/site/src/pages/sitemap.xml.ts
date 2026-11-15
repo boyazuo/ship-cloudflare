@@ -3,7 +3,7 @@ import { appConfig } from '../../../app.config';
 
 export const prerender = true;
 
-const paths = ['/', '/pricing', '/privacy', '/terms'] as const;
+const paths = ['/', '/features', '/pricing', '/changelog', '/privacy', '/terms'] as const;
 
 export const GET: APIRoute = () => {
   const urls = paths

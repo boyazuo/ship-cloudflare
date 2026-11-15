@@ -4,4 +4,12 @@ export const site = {
   url: 'http://127.0.0.1:4173',
 } as const;
 
-export const publicPaths = ['/', '/guide', '/tools/counter', '/privacy', '/terms'] as const;
+export const publicPaths = [
+  '/',
+  '/guide',
+  '/notes',
+  '/tools/counter',
+  '/changelog',
+  '/privacy',
+  '/terms',
+] as const;

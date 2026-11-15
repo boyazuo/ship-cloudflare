@@ -38,7 +38,7 @@ SaaS 模板已经接上邮箱密码认证。支付、国际化和文件存储只
 ```text
 apps/web
   浏览器 → Workers Static Assets
-           /  /guide  /tools/counter  /privacy  /terms → 对应 HTML
+           /  /guide  /notes  /tools/counter  /changelog  /privacy  /terms → 对应 HTML
            未知路径                  → 404 页面，状态码 404
 ```
 
@@ -46,7 +46,7 @@ SaaS 把可索引的页面留在资产层。只有 API 和应用壳的深链进�
 
 ```text
 apps/saas
-  浏览器 → /  /pricing  /privacy  /terms  带哈希的静态文件 → 资产层
+  浏览器 → /  /features  /pricing  /changelog  /privacy  /terms  带哈希的静态文件 → 资产层
          → 未知公开路径                  → 404 页面，状态码 404
          → /app  /app/*                  → Worker → 对应文件，否则 /app/index.html
          → /api/*                         → Worker → Hono → D1
@@ -139,7 +139,7 @@ pnpm --filter @ship/web preview    # http://127.0.0.1:4173
 pnpm --filter @ship/saas preview   # http://127.0.0.1:8787
 ```
 
-内容站预览应看到：`/`、`/guide`、`/tools/counter`、`/privacy`、`/terms` 为 200，刷新工具页仍是该页，未知路径为 404。SaaS 预览应看到：`/`、`/pricing`、`/privacy`、`/terms` 为 200，未知公开路径为 404，刷新 `/app/settings` 仍是应用壳，`GET /api/health` 与 `GET /api/meta` 带 `Cache-Control: private, no-store`，`POST /api/meta` 返回 401，错误体为 `{ "error": "auth_required" }`。注册后 `/app` 显示当前用户。
+内容站预览应看到：`/`、`/guide`、`/notes`、`/tools/counter`、`/changelog`、`/privacy`、`/terms` 为 200，刷新工具页仍是该页，未知路径为 404。SaaS 预览应看到：`/`、`/features`、`/pricing`、`/changelog`、`/privacy`、`/terms` 为 200，未知公开路径为 404，刷新 `/app/settings` 仍是应用壳，`GET /api/health` 与 `GET /api/meta` 带 `Cache-Control: private, no-store`，`POST /api/meta` 返回 401，错误体为 `{ "error": "auth_required" }`。注册后 `/app` 显示当前用户。
 
 ## 脚本
 
@@ -174,7 +174,9 @@ Astro 在构建时生成每个公开 URL。简单工具是独立页面上的浏�
 | --- | --- |
 | `/` | 首页 |
 | `/guide` | 内容页和简单工具的边界 |
+| `/notes` | 一篇示例短文，正文在构建时就写进 HTML |
 | `/tools/counter` | 不保存数据的计数器 |
+| `/changelog` | 内容站已落地的页面，按日期排列 |
 | `/privacy`、`/terms` | 法律页。这个站不保存个人信息 |
 | 未知路径 | 真实 404 |
 
@@ -187,7 +189,9 @@ Astro 在构建时生成每个公开 URL。简单工具是独立页面上的浏�
 | URL | 作用 |
 | --- | --- |
 | `/` | 可索引的首页 |
+| `/features` | 公开页、应用壳、会话这三块各写一句 |
 | `/pricing` | 静态方案名称和价格文案，没有结账 |
+| `/changelog` | 模板已落地的内容，按日期排列 |
 | `/privacy`、`/terms` | 法律页。隐私页写明账户字段、会话和删除 |
 | `/app` | 应用首页。登录后显示当前用户 |
 | `/app/sign-in`、`/app/sign-up`、`/app/reset` | 登录、注册、重置密码 |

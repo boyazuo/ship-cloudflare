@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro'
+import { site } from '../site'
+
+const description = 'A sample page. The HTML is built before anyone requests it.'
+const canonical = new URL('/notes', site.url).href
+---
+
+<Base title={`Notes · ${site.name}`} description={description} canonical={canonical}>
+  <main id="content" class="prose">
+    <h1>A page is a file.</h1>
+    <p class="lede">
+      This note is the pattern for writing on this site. It was built with the rest of the HTML.
+    </p>
+    <h2>What a reader gets</h2>
+    <p>
+      The title, this paragraph, and the links are in the response. Nothing is filled in after the
+      page loads. The <a href="/guide">guide</a> says which kinds of pages belong here.
+    </p>
+    <h2>What a button does not</h2>
+    <p>
+      The <a href="/tools/counter">counter</a> can change a number on its own page. It does not
+      change this one, and it does not save anything.
+    </p>
+  </main>
+</Base>

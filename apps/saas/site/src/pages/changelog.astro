@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro'
+import { appConfig } from '../../../app.config'
+
+const description = 'What has shipped in this SaaS template.'
+const canonical = new URL('/changelog', appConfig.app.url).href
+---
+
+<Base title={`Changelog · ${appConfig.app.name}`} description={description} canonical={canonical}>
+  <main id="content">
+    <h1>Changelog</h1>
+    <p class="lede">A short record of the template. Prices are still display text.</p>
+    <ol class="log">
+      <li>
+        <time datetime="2026-11-15">Nov 15, 2026</time>
+        <div>
+          <h2>Sessions</h2>
+          <p>
+            Email and password sign-in, a seven-day session, password reset, and account deletion
+            from settings.
+          </p>
+        </div>
+      </li>
+      <li>
+        <time datetime="2026-11-15">Nov 15, 2026</time>
+        <div>
+          <h2>Public pages</h2>
+          <p>
+            Home, <a href="/features">features</a>, <a href="/pricing">pricing</a>, and this page
+            are static HTML. Checkout is not connected.
+          </p>
+        </div>
+      </li>
+    </ol>
+  </main>
+</Base>
