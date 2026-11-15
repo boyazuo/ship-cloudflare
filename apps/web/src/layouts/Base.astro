@@ -49,6 +49,14 @@ const links = [
         </nav>
       </header>
       <slot />
+      <footer class="legal">
+        <a href="/privacy" aria-current={path === '/privacy' ? 'page' : undefined}>
+          Privacy
+        </a>
+        <a href="/terms" aria-current={path === '/terms' ? 'page' : undefined}>
+          Terms
+        </a>
+      </footer>
     </div>
   </body>
 </html>

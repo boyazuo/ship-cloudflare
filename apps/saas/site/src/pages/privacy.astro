@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro'
+import { appConfig } from '../../../app.config'
+
+const description = 'What this SaaS template stores. The only database row is operational, not personal.'
+const canonical = new URL('/privacy', appConfig.app.url).href
+---
+
+<Base title={`Privacy · ${appConfig.app.name}`} description={description} canonical={canonical}>
+  <main id="content" class="prose">
+    <h1>Privacy</h1>
+    <p class="lede">
+      Public pages are static HTML. They do not read the database and they do not set cookies.
+    </p>
+    <h2>What is stored</h2>
+    <p>
+      The database has one table, app_meta. It holds a schema version so the template can show that
+      migrations ran. That row is operational data, not information about a person. The read-only
+      API can return the application name and the list of enabled plugins.
+    </p>
+    <h2>The application shell</h2>
+    <p>
+      <a href="/app">/app</a> does not sign anyone in. Requests that would change data are refused.
+      This site has no account.
+    </p>
+    <p>
+      The <a href="/terms">terms</a> match this site as published. A later change that starts keeping
+      personal information has to rewrite this page in the same change, including what is kept, how
+      long it is kept, and how it is deleted.
+    </p>
+  </main>
+</Base>

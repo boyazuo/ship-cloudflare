@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro'
+import { site } from '../site'
+
+const description = 'Terms for this static content site. There is no account and no paid service.'
+const canonical = new URL('/terms', site.url).href
+---
+
+<Base title={`Terms · ${site.name}`} description={description} canonical={canonical}>
+  <main id="content" class="prose">
+    <h1>Terms</h1>
+    <p class="lede">
+      These pages are a published template. There is no account and no paid service.
+    </p>
+    <h2>The pages</h2>
+    <p>
+      Home, the guide, the counter, and these legal pages are static documents. The counter is a
+      browser demonstration. Refreshing it starts over. Clicks on that page are not saved.
+    </p>
+    <h2>No service commitment</h2>
+    <p>
+      The template is provided as published. It does not include support or an uptime promise. The <a
+        href="/privacy">privacy page</a
+      > states what is stored: no personal information.
+    </p>
+  </main>
+</Base>

@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro'
+import { appConfig } from '../../../app.config'
+
+const description = 'Terms for this SaaS template. Prices are display text and checkout is not connected.'
+const canonical = new URL('/terms', appConfig.app.url).href
+---
+
+<Base title={`Terms · ${appConfig.app.name}`} description={description} canonical={canonical}>
+  <main id="content" class="prose">
+    <h1>Terms</h1>
+    <p class="lede">
+      You can read the public pages and open the application shell. There is no account and no
+      checkout.
+    </p>
+    <h2>Prices</h2>
+    <p>
+      Figures on the <a href="/pricing">pricing</a> page are display text from configuration. They
+      are not an offer you can accept on this site.
+    </p>
+    <h2>The application</h2>
+    <p>
+      The shell at <a href="/app">/app</a> shows the template state. It does not create a user.
+      Writes stay closed. The <a href="/privacy">privacy page</a> describes the only stored row.
+    </p>
+  </main>
+</Base>
